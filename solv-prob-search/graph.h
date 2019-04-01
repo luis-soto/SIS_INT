@@ -22,11 +22,12 @@ enum Direction
     // Southwest
     SW,
     // West
-    W
+    W,
+    // used when direction doesn't matter
+    DEFAULT
 };
 
-// This class defines the nodes of a graph (directed or undirected)
-struct Node
+struct State
 {
 		unsigned int x;
         unsigned int y;
@@ -38,13 +39,11 @@ class Graph
 {
 	private:
         int** edges;
-		vector<Node*> graph;
+		vector<State*> graph;
         int numCols, numRows, numDir;
 
-        // IMPLEMENTED
         bool IsAdjacent(int idxOrigin, int idxEnd);
 
-        // IMPLEMENTED
         void AddAdjacentNode(int idxOrigin, int idxEnd, int w = 1);
 
 	public:
@@ -73,34 +72,25 @@ class Graph
             this->graph.clear();
         }
 
-        // IMPLEMENTED
         void AddAdjacentNode(int originX, int originY, Direction originDir,
                         int endX, int endY, Direction endDir, int w = 1);
 
-        // IMPLEMENTED
         bool IsAdjacent(int originX, int originY, Direction originDir,
                         int endX, int endY, Direction endDir);
 
-        // IMPLEMENTED
         void DeleteNode(int x, int y, Direction dir);
 
-        // IMPLEMENTED
         void JoinEdge(int originX, int originY, Direction originDir,
                         int endX, int endY, Direction endDir, int w = 1);
         
-        // IMPLEMENTED
         void JoinNode(int x, int y, Direction dir);
         
-        // IMPLEMENTED
         // Verifies whether or not the node specified by <x,y,dir> belongs to the graph
         // Returns the index of the node if belongs to the graph and -1 id doesn't
         int NodeIsMember(int x, int y, Direction dir) const;
 
-        // IMPLEMENTED
         void RemoveEdge(int originX, int originY, Direction originDir,
                             int endX, int endY, Direction endDir);
-
-        void DisplayNode(int idxOrigin);
 };
 
 #endif // GRAPH_H

@@ -1,9 +1,8 @@
-#include <iostream>
-#include <fstream>
-#include "tarefa1.h"
+#include "graph.h"
 
 using namespace std;
 
+// -------------------------------------------------------------------------------------------------
 void Graph::AddAdjacentNode(int idxOrigin, int idxEnd, int w)
 {
 	if((-1 != idxOrigin) && (-1 != idxEnd))
@@ -12,6 +11,7 @@ void Graph::AddAdjacentNode(int idxOrigin, int idxEnd, int w)
 	}
 }
 
+// -------------------------------------------------------------------------------------------------
 void Graph::AddAdjacentNode(int originX, int originY, Direction originDir,
                         int endX, int endY, Direction endDir, int w)
 {
@@ -24,6 +24,7 @@ void Graph::AddAdjacentNode(int originX, int originY, Direction originDir,
 	}
 }
 
+// -------------------------------------------------------------------------------------------------
 bool Graph::IsAdjacent(int originX, int originY, Direction originDir,
                         int endX, int endY, Direction endDir)
 {
@@ -41,6 +42,7 @@ bool Graph::IsAdjacent(int originX, int originY, Direction originDir,
 	return isAdjacent;
 }
 
+// -------------------------------------------------------------------------------------------------
 bool Graph::IsAdjacent(int idxOrigin, int idxEnd)
 {
 	bool isAdjacent = false;
@@ -52,6 +54,7 @@ bool Graph::IsAdjacent(int idxOrigin, int idxEnd)
 	return isAdjacent;
 }
 
+// -------------------------------------------------------------------------------------------------
 void Graph::DeleteNode(int x, int y, Direction dir)
 {
 	int idx = this->NodeIsMember(x, y, dir);
@@ -62,6 +65,7 @@ void Graph::DeleteNode(int x, int y, Direction dir)
 	}	
 }
 
+// -------------------------------------------------------------------------------------------------
 int Graph::NodeIsMember(int x, int y, Direction dir) const
 {
 	int idx = -1;
@@ -81,6 +85,7 @@ int Graph::NodeIsMember(int x, int y, Direction dir) const
 	return idx;
 }
 
+// -------------------------------------------------------------------------------------------------
 void Graph::JoinEdge(int originX, int originY, Direction originDir,
                         int endX, int endY, Direction endDir, int w)
 {	
@@ -105,12 +110,13 @@ void Graph::JoinEdge(int originX, int originY, Direction originDir,
 	}
 }
 
+// -------------------------------------------------------------------------------------------------
 void Graph::JoinNode(int x, int y, Direction dir)
 {
 	const int idx = this->NodeIsMember(x, y, dir);
 	if(-1 == idx)
 	{
-		Node* newNode = new Node();
+		State* newNode = new State();
 		if(nullptr != newNode)
 		{
 			newNode->dir = dir;
@@ -121,6 +127,7 @@ void Graph::JoinNode(int x, int y, Direction dir)
 	}
 }
 
+// -------------------------------------------------------------------------------------------------
 void Graph::RemoveEdge(int originX, int originY, Direction originDir,
                         int endX, int endY, Direction endDir)
 {
@@ -131,23 +138,4 @@ void Graph::RemoveEdge(int originX, int originY, Direction originDir,
 	{
 		this->edges[idxOrigin][idxEnd] = 0;
 	}
-}
-
-void Graph::DisplayNode(int idx)
-{
-	cout << "Node " << idx << " represents state: <" << this->graph[idx]->x << "," << this->graph[idx]->y
-		 << "," << this->graph[idx]->dir << ">" << endl;
-}
-
-int main()
-{
-	Graph graph(10, 10, 8);
-	cout << "Starting graph creation..." << endl;
-	graph.JoinNode(0,0,Direction::E);
-	graph.JoinNode(9,1,Direction::NE);
-	graph.DisplayNode(0);
-	graph.DisplayNode(1);
-	graph.DeleteNode(0,0,Direction::E);
-	graph.DisplayNode(0);
-	return 0;
 }
