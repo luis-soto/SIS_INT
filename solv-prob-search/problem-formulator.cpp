@@ -15,6 +15,49 @@ ProblemFormulator::ProblemFormulator()
 }
 
 // -------------------------------------------------------------------------------------------------
+Direction DetermineDirection(char ch)
+{
+    Direction dir;
+    
+    switch(ch)
+    {
+        case '<':
+            dir = Direction::W;
+            break;
+
+        case '>':
+            dir = Direction::E;
+            break;
+
+        case 'v':
+            dir = Direction::S;
+            break;
+
+        case '^':
+            dir = Direction::N;
+            break;
+
+        case '%':
+            dir = Direction::NW;
+            break;
+
+        case '\\':
+            dir = Direction::SE;
+            break;
+
+        case '/':
+            dir = Direction::SW;
+            break;
+
+        case '\?':
+            dir = Direction::NE;
+            break;
+    }
+
+    return dir;
+}
+
+// -------------------------------------------------------------------------------------------------
 void ProblemFormulator::GenerateGraph()
 {
     for(int x; x < this->map->GetRows(); x++)
@@ -28,48 +71,15 @@ void ProblemFormulator::GenerateGraph()
                 {
                     if('x' != ch)
                     {
-                        this->initialState->x = x;
-                        this->initialState->y = y;
-                        switch(ch)
-                        {
-                            case '<':
-                                this->initialState->dir = Direction::W;
-                                break;
-
-                            case '>':
-                                this->initialState->dir = Direction::E;
-                                break;
-
-                            case 'v':
-                                this->initialState->dir = Direction::S;
-                                break;
-
-                            case '^':
-                                this->initialState->dir = Direction::N;
-                                break;
-
-                            case '%':
-                                this->initialState->dir = Direction::NW;
-                                break;
-
-                            case '\\':
-                                this->initialState->dir = Direction::SE;
-                                break;
-
-                            case '/':
-                                this->initialState->dir = Direction::SW;
-                                break;
-
-                            case '\?':
-                                this->initialState->dir = Direction::NE;
-                                break;
-                        }
+                        this->initialState->SetX(x);
+                        this->initialState->SetY(x);
+                        this->initialState->SetDir(DetermineDirection(ch));
                     }
                     else
                     {
-                        this->goalState->x = x;
-                        this->goalState->y = y;
-                        this->goalState->dir = Direction::DEFAULT;
+                        this->goalState->SetX(x);
+                        this->goalState->SetY(y);
+                        this->goalState->SetDir(Direction::DEFAULT);
                     }
                 }
 
@@ -160,6 +170,7 @@ void ProblemFormulator::GenerateGraph()
     }
 }
 
+// -------------------------------------------------------------------------------------------------
 int main()
 {
     ProblemFormulator problemFormulator;
