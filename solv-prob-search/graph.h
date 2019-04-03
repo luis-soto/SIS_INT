@@ -1,5 +1,5 @@
-#ifndef GRAPH_H
-#define GRAPH_H
+#ifndef __GRAPH_H
+#define __GRAPH_H
 
 #include <vector>
 
@@ -27,11 +27,56 @@ enum Direction
     DEFAULT
 };
 
-struct State
+class State
 {
-		unsigned int x;
-        unsigned int y;
+    private:
+		int x;
+        int y;
         Direction dir;
+    
+    public:
+        State(int x = 0, int y = 0, Direction dir = Direction::DEFAULT)
+        {
+            this->x = x;
+            this->y = y;
+            this->dir = dir;
+        }
+
+        ~State()
+        {
+
+        }
+
+        Direction GetDir()
+        {
+            return this->dir;
+        }
+
+        int GetX()
+        {
+            return this->x;
+        }
+
+        int GetY()
+        {
+            return this->y;
+        }
+
+        void SetDir(Direction dir)
+        {
+            this->dir = dir;
+        }
+
+        void SetX(int x)
+        {
+            this->x = x;
+        }
+
+        void SetY(int y)
+        {
+            this->y = y;
+        }
+            
 };
 
 /// This class defines a directed graph
@@ -42,12 +87,8 @@ class Graph
 		vector<State*> graph;
         int numCols, numRows, numDir;
 
-        bool IsAdjacent(int idxOrigin, int idxEnd);
-
-        void AddAdjacentNode(int idxOrigin, int idxEnd, int w = 1);
-
 	public:
-        Graph(int numCols, int numRows, int numDir)
+        Graph(int numCols, int numRows, int numDir = 8)
         {
             // Create Adjancency-matrix and initializes to 0
             edges = new int*[numCols*numDir*numRows]();
@@ -72,11 +113,41 @@ class Graph
             this->graph.clear();
         }
 
+        // Can return State* because State is a class and already has encapsulation
+        State* GetStateByIdx(int idx) const
+        {
+            State* retState = nullptr;
+
+            if((0 <= idx) && (this->graph.size() > idx))
+            {
+                retState = this->graph[idx];
+            }
+
+            return retState;
+        }
+
+        int GetEdgeWeigthByIdx(int idxOrigin, int idxEnd) const;
+
+        // Returns the maximum number of nodes suported by the graph
+        int GetExpectedNumOfNodes() const
+        {
+            return this->numRows*this->numCols*this->numDir;
+        }
+
+        bool IsValidEdge(int idxOrigin, int idxEnd) const;
+
+        bool IsAdjacent(int idxOrigin, int idxEnd) const;
+
+        void AddAdjacentNode(int idxOrigin, int idxEnd, int w = 1);
+
         void AddAdjacentNode(int originX, int originY, Direction originDir,
                         int endX, int endY, Direction endDir, int w = 1);
 
+        // Check whether or not x and y are in the range of possible states
+        bool IsValidState(int x, int y) const;
+
         bool IsAdjacent(int originX, int originY, Direction originDir,
-                        int endX, int endY, Direction endDir);
+                        int endX, int endY, Direction endDir) const;
 
         void DeleteNode(int x, int y, Direction dir);
 
@@ -93,4 +164,4 @@ class Graph
                             int endX, int endY, Direction endDir);
 };
 
-#endif // GRAPH_H
+#endif // __GRAPH_H

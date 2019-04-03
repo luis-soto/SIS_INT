@@ -1,4 +1,5 @@
 #include "graph.h"
+#include "tree.h"
 
 using namespace std;
 
@@ -26,7 +27,7 @@ void Graph::AddAdjacentNode(int originX, int originY, Direction originDir,
 
 // -------------------------------------------------------------------------------------------------
 bool Graph::IsAdjacent(int originX, int originY, Direction originDir,
-                        int endX, int endY, Direction endDir)
+                        int endX, int endY, Direction endDir) const
 {
 	bool isAdjacent = false;
 	int idxOrigin = this->NodeIsMember(originX, originY, originDir);
@@ -43,7 +44,34 @@ bool Graph::IsAdjacent(int originX, int originY, Direction originDir,
 }
 
 // -------------------------------------------------------------------------------------------------
-bool Graph::IsAdjacent(int idxOrigin, int idxEnd)
+int Graph::GetEdgeWeigthByIdx(int idxOrigin, int idxEnd) const
+{
+	int weigth = 0;
+
+	if(IsValidEdge(idxOrigin, idxEnd))
+	{
+		weigth = this->edges[idxOrigin][idxEnd];
+	}
+
+	return weigth;
+}
+
+// -------------------------------------------------------------------------------------------------
+bool Graph::IsValidEdge(int idxOrigin, int idxEnd) const
+{
+	bool isValid = false;
+
+	if(((0 <= idxOrigin) && (this->GetExpectedNumOfNodes() > idxOrigin)) &&
+		((0 <= idxEnd) && (this->GetExpectedNumOfNodes() > idxEnd)))
+	{
+		isValid = true;
+	}
+
+	return isValid;
+}
+
+// -------------------------------------------------------------------------------------------------
+bool Graph::IsAdjacent(int idxOrigin, int idxEnd) const
 {
 	bool isAdjacent = false;
 
@@ -71,11 +99,11 @@ int Graph::NodeIsMember(int x, int y, Direction dir) const
 	int idx = -1;
 	for(int it = 0; it < this->graph.size();it++)
 	{
-		if(this->graph[it]->x == x)
+		if(this->graph[it]->GetX() == x)
 		{
-			if(this->graph[it]->y == y)
+			if(this->graph[it]->GetY() == y)
 			{
-				if(this->graph[it]->dir == dir)
+				if(this->graph[it]->GetDir() == dir)
 				{
 					idx = it;
 				}
@@ -111,18 +139,33 @@ void Graph::JoinEdge(int originX, int originY, Direction originDir,
 }
 
 // -------------------------------------------------------------------------------------------------
+bool Graph::IsValidState(int x, int y) const
+{
+	bool isValid = false;
+
+	if((0 <= x) && (this->numRows > x) && (0 <= y) && (this->numCols > y))
+	{
+		isValid = true;
+	}
+
+	return isValid;
+}
+
+// -------------------------------------------------------------------------------------------------
 void Graph::JoinNode(int x, int y, Direction dir)
 {
-	const int idx = this->NodeIsMember(x, y, dir);
-	if(-1 == idx)
+	if(this->IsValidState(x, y))
 	{
-		State* newNode = new State();
-		if(nullptr != newNode)
+		const int idx = this->NodeIsMember(x, y, dir);
+
+		// Node does not exist already
+		if(-1 == idx)
 		{
-			newNode->dir = dir;
-			newNode->x = x;
-			newNode->y = y;
-			this->graph.push_back(newNode);
+			State* newNode = new State(x, y, dir);
+			if(nullptr != newNode)
+			{
+				this->graph.push_back(newNode);
+			}
 		}
 	}
 }
