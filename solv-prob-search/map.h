@@ -31,7 +31,16 @@ class Map
 
     char GetItemByPos(int r, int c) const
     {
-        return this->map[r][c];
+        char ret;
+        if((0 <= r) && (0 <= c) && (this->Rows > r) && (this->Cols > c))
+        {
+            ret = this->map[r][c];
+        }
+        else
+        {
+            ret = '*';
+        }
+        return ret;
     }
 };
 
