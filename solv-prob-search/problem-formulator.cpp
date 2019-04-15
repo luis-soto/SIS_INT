@@ -1,5 +1,4 @@
 #include "problem-formulator.h"
-#include <iostream>
 
 Direction All[] = {Direction::NW, Direction::N, Direction::NE, Direction::E, Direction::SE,
                    Direction::S, Direction::SW, Direction::W};
@@ -7,15 +6,15 @@ Direction All[] = {Direction::NW, Direction::N, Direction::NE, Direction::E, Dir
 // -------------------------------------------------------------------------------------------------
 ProblemFormulator::ProblemFormulator()
 {
-    this->initialState = new State;
-    this->goalState = new State;
-    this->map = new Map();
-    this->graphModel = new Graph(this->map->GetRows(), this->map->GetCols());
-    this->GenerateGraph();
+    this->_initialState = new State;
+    this->_goalState = new State;
+    this->_map = new Map();
+    this->_graphModel = new Graph(this->_map->getRows(), this->_map->getCols());
+    this->generateGraph();
 }
 
 // -------------------------------------------------------------------------------------------------
-Direction DetermineDirection(char ch)
+Direction determineDirection(char ch)
 {
     Direction dir;
     
@@ -58,28 +57,28 @@ Direction DetermineDirection(char ch)
 }
 
 // -------------------------------------------------------------------------------------------------
-void ProblemFormulator::GenerateGraph()
+void ProblemFormulator::generateGraph()
 {
-    for(int x; x < this->map->GetRows(); x++)
+    for(int x = 0; x < this->_map->getRows(); x++)
     {
-        for(int y = 0; y < this->map->GetCols(); y++)
+        for(int y = 0; y < this->_map->getCols(); y++)
         {
-            char ch = this->map->GetItemByPos(x,y);
+            char ch = this->_map->getItemByPos(x,y);
             if( '*' != ch)
             {
                 if('.' != ch)
                 {
                     if('x' != ch)
                     {
-                        this->initialState->SetX(x);
-                        this->initialState->SetY(x);
-                        this->initialState->SetDir(DetermineDirection(ch));
+                        this->_initialState->setX(x);
+                        this->_initialState->setY(y);
+                        this->_initialState->setDir(determineDirection(ch));
                     }
                     else
                     {
-                        this->goalState->SetX(x);
-                        this->goalState->SetY(y);
-                        this->goalState->SetDir(Direction::DEFAULT);
+                        this->_goalState->setX(x);
+                        this->_goalState->setY(y);
+                        this->_goalState->setDir(Direction::DEFAULT);
                     }
                 }
 
@@ -88,75 +87,75 @@ void ProblemFormulator::GenerateGraph()
                     switch(dir)
                     {
                         case Direction::NW:
-                            if('*' != this->map->GetItemByPos(x-1,y-1))
+                            if('*' != this->_map->getItemByPos(x-1,y-1))
                             {
-                                this->graphModel->JoinEdge(x, y, dir, x-1, y-1,dir);
+                                this->_graphModel->joinEdge(x, y, dir, x-1, y-1,dir);
                             }
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::W);
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::N);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::W);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::N);
                             break;
 
                         case Direction::N:
-                            if('*' != this->map->GetItemByPos(x-1,y))
+                            if('*' != this->_map->getItemByPos(x-1,y))
                             {
-                                this->graphModel->JoinEdge(x, y, dir, x-1, y,dir);
+                                this->_graphModel->joinEdge(x, y, dir, x-1, y,dir);
                             }
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::NW);
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::NE);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::NW);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::NE);
                             break;
 
                         case Direction::NE:
-                            if('*' != this->map->GetItemByPos(x-1,y+1))
+                            if('*' != this->_map->getItemByPos(x-1,y+1))
                             {
-                                this->graphModel->JoinEdge(x, y, dir, x-1, y+1,dir);
+                                this->_graphModel->joinEdge(x, y, dir, x-1, y+1,dir);
                             }
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::N);
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::E);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::N);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::E);
                             break;
 
                         case Direction::E:
-                            if('*' != this->map->GetItemByPos(x,y+1))
+                            if('*' != this->_map->getItemByPos(x,y+1))
                             {
-                                this->graphModel->JoinEdge(x, y, dir, x, y+1,dir);
+                                this->_graphModel->joinEdge(x, y, dir, x, y+1,dir);
                             }
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::NE);
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::SE);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::NE);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::SE);
                             break;
 
                         case Direction::SE:
-                            if('*' != this->map->GetItemByPos(x+1,y+1))
+                            if('*' != this->_map->getItemByPos(x+1,y+1))
                             {
-                                this->graphModel->JoinEdge(x, y, dir, x+1, y+1,dir);
+                                this->_graphModel->joinEdge(x, y, dir, x+1, y+1,dir);
                             }
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::E);
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::S);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::E);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::S);
                             break;
                             
                         case Direction::S:
-                            if('*' != this->map->GetItemByPos(x+1,y))
+                            if('*' != this->_map->getItemByPos(x+1,y))
                             {
-                                this->graphModel->JoinEdge(x, y, dir, x+1, y,dir);
+                                this->_graphModel->joinEdge(x, y, dir, x+1, y,dir);
                             }
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::SW);
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::SE);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::SW);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::SE);
                             break;
 
                         case Direction::SW:
-                            if('*' != this->map->GetItemByPos(x+1,y-1))
+                            if('*' != this->_map->getItemByPos(x+1,y-1))
                             {
-                                this->graphModel->JoinEdge(x, y, dir, x+1, y-1,dir);
+                                this->_graphModel->joinEdge(x, y, dir, x+1, y-1,dir);
                             }
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::W);
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::S);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::W);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::S);
                             break;
 
                         case Direction::W:
-                            if('*' != this->map->GetItemByPos(x,y-1))
+                            if('*' != this->_map->getItemByPos(x,y-1))
                             {
-                                this->graphModel->JoinEdge(x, y, dir, x, y-1,dir);
+                                this->_graphModel->joinEdge(x, y, dir, x, y-1,dir);
                             }
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::SW);
-                            this->graphModel->JoinEdge(x, y, dir, x, y,Direction::NW);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::SW);
+                            this->_graphModel->joinEdge(x, y, dir, x, y,Direction::NW);
                             break;
                     }
                 }
@@ -168,12 +167,4 @@ void ProblemFormulator::GenerateGraph()
             
         }
     }
-}
-
-// -------------------------------------------------------------------------------------------------
-int main()
-{
-    ProblemFormulator problemFormulator;
-    cout << "Apparently implementation is OK..." << endl;
-    return 0;
 }

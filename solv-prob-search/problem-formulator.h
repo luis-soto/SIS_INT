@@ -10,28 +10,48 @@ using namespace std;
 class ProblemFormulator
 {
     private:
-        State* initialState;
+        State* _initialState;
 
         // goalState represents the set of states that we want to reach
         // goalState.x represents the x of interest, if -1 doesn't matter
         // goalState.y represents the y of interest, if -1 doesn't matter
         // goalState.dir represents the direction of interest, if DEFAULT doesn't matter
-        State* goalState;
+        State* _goalState;
         // Represents the model of the rectangular grid
-        Graph* graphModel;
+        Graph* _graphModel;
         // Represents the map
-        Map* map;
+        Map* _map;
     public:
         ProblemFormulator();
         
         ~ProblemFormulator()
         {
-            delete this->initialState;
-            delete this->goalState;
-            delete this->graphModel;
+            delete this->_initialState;
+            delete this->_goalState;
+            delete this->_graphModel;
         }
 
-        void GenerateGraph();
+        State* getGoalState()
+        {
+            return this->_goalState;
+        }
+
+        State* getInitialState()
+        {
+            return this->_initialState;
+        }
+
+        Graph* getGraphModel()
+        {
+            return this->_graphModel;
+        }
+
+        Map* getMap()
+        {
+            return this->_map;
+        }
+
+        void generateGraph();
 };
 
 
