@@ -21,30 +21,30 @@ Map::Map()
         char ch;
 
         getline(mapFile,line);
-        this->Rows = stoi(line);
+        this->_rows = stoi(line);
         getline(mapFile,line);
-        this->Cols = stoi(line);
+        this->_cols = stoi(line);
 
-        this->map = new char*[Rows]();
-            
-        for(int idx = 0; idx < Rows; idx++)
+        this->_map = new char*[this->_rows]();
+
+        for(int idx = 0; idx < this->_rows; idx++)
         {
-            this->map[idx] = new char[Cols]();
+            this->_map[idx] = new char[this->_cols]();
         }
 
         int r = 0;
         int c = 0;
 
-        while(mapFile.get(this->map[r][c]))
+        while(mapFile.get(this->_map[r][c]))
         {
-            if('\n' != this->map[r][c])
+            if('\n' != this->_map[r][c])
             {
                 c++;
-                if(this->Cols <= c)
+                if(this->_cols <= c)
                 {
                     r++;
                     c = 0;
-                    if(this->Rows <= r)
+                    if(this->_rows <= r)
                     {
                         break;
                     }

@@ -5,9 +5,9 @@
 class Map
 {
     private:
-        char **map;
-        int Rows;
-        int Cols;
+        char** _map;
+        int _rows;
+        int _cols;
 
     public:
     Map();
@@ -17,24 +17,22 @@ class Map
         
     }
 
-    void Display();
-
-    int GetRows() const
+    int getRows() const
     {
-        return this->Rows;
+        return this->_rows;
     }
 
-    int GetCols() const
+    int getCols() const
     {
-        return this->Cols;
+        return this->_cols;
     }
 
-    char GetItemByPos(int r, int c) const
+    char getItemByPos(int r, int c) const
     {
         char ret;
-        if((0 <= r) && (0 <= c) && (this->Rows > r) && (this->Cols > c))
+        if((0 <= r) && (0 <= c) && (this->_rows > r) && (this->_cols > c))
         {
-            ret = this->map[r][c];
+            ret = this->_map[r][c];
         }
         else
         {
