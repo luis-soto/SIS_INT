@@ -4,19 +4,22 @@
 using namespace std;
 
 // -------------------------------------------------------------------------------------------------
-void Node::AddSuccessor(Node* newSuccessor)
+void Node::addSuccessor(Node* newSuccessor)
 {
-	this->successors.push_back(newSuccessor);
+	if(nullptr != newSuccessor)
+	{
+		this->_successors.push_back(newSuccessor);
+	}
 }
 
 // -------------------------------------------------------------------------------------------------
-Node* Node::GetSuccessor(int idx)
+Node* Node::getSuccessor(int idx)
 {
 	Node* ret = nullptr;
 	
-	if(this->successors.size() > idx)
+	if(this->_successors.size() > idx)
 	{
-		ret = this->successors[idx];
+		ret = this->_successors[idx];
 	}
 	else
 	{
@@ -27,38 +30,50 @@ Node* Node::GetSuccessor(int idx)
 }
 
 // -------------------------------------------------------------------------------------------------
-void Tree::FindSuccessors(Node* parent)
+void Tree::findSuccessors(Node* parent)
 {
 	if(nullptr != parent)
 	{
-		vector<int> adjNodes;
-		int parentIdx = this->graph->NodeIsMember(parent->GetState()->GetX(), parent->GetState()->GetY(),
-												  parent->GetState()->GetDir());
+		//// Need to verify if the State* returned by GetState() is nullptr
+		int parentIdx = this->_graph->nodeIsMember(parent->getState()->getX(), parent->getState()->getY(),
+												  parent->getState()->getDir());
 		
-		// Determine adjacent nodes (interpreted as children in the tree)
-		for(int adjIdx = 0; adjIdx < graph->GetExpectedNumOfNodes(); adjIdx++)
+		if(-1 != parentIdx)
 		{
-			if(graph->IsAdjacent(parentIdx, adjIdx))
+			vector<int> adjNodes;
+
+			// Determine adjacent nodes (interpreted as children in the tree)
+			for(int adjIdx = 0; adjIdx < this->_graph->getExpectedNumOfNodes(); adjIdx++)
 			{
-				adjNodes.push_back(adjIdx);
+				if(this->_graph->isAdjacent(parentIdx, adjIdx))
+				{
+					adjNodes.push_back(adjIdx);
+				}
 			}
-		}
 
-		// Create nodes and add them to the successors vector of the parent node
-		for(int idx = 0; idx < adjNodes.size(); idx++)
-		{
-			Action action = DetermineAction(adjNodes[idx], parent);
-
-			Node* newNode = new Node(graph->GetStateByIdx(adjNodes[idx]), parent,
-									(parent->GetG())+graph->GetEdgeWeigthByIdx(parentIdx, adjNodes[idx]), action);
-
-			if(nullptr != newNode)
+			// Create nodes and add them to the successors vector of the parent node
+			// if the nodes don't exist already
+			for(int idx = 0; idx < adjNodes.size(); idx++)
 			{
-				parent->AddSuccessor(newNode);
-			}
-		}
+				if(!this->isNodeInTree(this->_graph->getStateByIdx(adjNodes[idx])))
+				{
+					Action action = determineAction(adjNodes[idx], parent);
 
-		adjNodes.clear();
+					Node* newNode = new Node(this->_graph->getStateByIdx(adjNodes[idx]), parent,
+											(parent->getG())+this->_graph->getEdgeWeigthByIdx(parentIdx,
+											adjNodes[idx]), action);
+
+					this->_nodes.push_back(newNode);
+
+					if(nullptr != newNode)
+					{
+						parent->addSuccessor(newNode);
+					}
+				}
+			}
+
+			adjNodes.clear();
+			}
 	}
 	else
 	{
@@ -67,26 +82,26 @@ void Tree::FindSuccessors(Node* parent)
 }
 
 // -------------------------------------------------------------------------------------------------
-Action Tree::DetermineAction(int idx, Node* parent)
+Action Tree::determineAction(int idx, Node* parent)
 {
 	Action action;
 
-	if((1 == abs(graph->GetStateByIdx(idx)->GetX()-parent->GetState()->GetX())) ||
-		(1 == abs(graph->GetStateByIdx(idx)->GetY()-parent->GetState()->GetY())))
+	if((1 == abs(this->_graph->getStateByIdx(idx)->getX()-parent->getState()->getX())) ||
+		(1 == abs(this->_graph->getStateByIdx(idx)->getY()-parent->getState()->getY())))
 	{
 		action = Action::FRONT;
 	}
 	else
 	{
-		if((1 == (graph->GetStateByIdx(idx)->GetDir()-parent->GetState()->GetDir())) ||
-			((Direction::W-Direction::NW) == (graph->GetStateByIdx(idx)->GetDir()-parent->GetState()->GetDir())))
+		if((1 == (this->_graph->getStateByIdx(idx)->getDir()-parent->getState()->getDir())) ||
+			((Direction::W-Direction::NW) == (this->_graph->getStateByIdx(idx)->getDir()-parent->getState()->getDir())))
 		{
 			action = Action::TURN_RIGHT;
 		}
 		else
 		{
-			if((-1==(graph->GetStateByIdx(idx)->GetDir()-parent->GetState()->GetDir())) ||
-				((Direction::NW-Direction::W) == (graph->GetStateByIdx(idx)->GetDir()-parent->GetState()->GetDir())))
+			if((-1==(this->_graph->getStateByIdx(idx)->getDir()-parent->getState()->getDir())) ||
+				((Direction::NW-Direction::W) == (this->_graph->getStateByIdx(idx)->getDir()-parent->getState()->getDir())))
 			{
 				action = Action::TURN_LEFT;
 			}
@@ -97,4 +112,40 @@ Action Tree::DetermineAction(int idx, Node* parent)
 		}
 	}
 	return action;
+}
+
+// -------------------------------------------------------------------------------------------------
+bool Tree::isNodeInTree(State* state) const
+{
+	bool isNodeInTree = false;
+	if(nullptr != state)
+	{
+		if(!this->_nodes.empty())
+		{
+			for(auto it : this->_nodes)
+			{
+				if((state->getX() == it->getState()->getX()) && (state->getY() == it->getState()->getY())
+					&& (state->getDir() == it->getState()->getDir()))
+				{
+					isNodeInTree = true;
+				}
+			}
+		}
+	}
+	return isNodeInTree;
+}
+
+// -------------------------------------------------------------------------------------------------
+vector<Action> Tree::generateActionQueue(Node* node)
+{
+	vector<Action> actionQueue;
+	if(nullptr != node)
+	{
+		while(nullptr != node)
+		{
+			actionQueue.push_back(node->getAction());
+			node = node->getParent();
+		}
+	}
+	return actionQueue;
 }

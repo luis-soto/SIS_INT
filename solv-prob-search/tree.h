@@ -3,6 +3,7 @@
 
 #include "graph.h"
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -17,26 +18,23 @@ enum Action
 class Node
 {
 	private:
-		State* state;
-		bool visited;
-        Node* parent;
-		vector<Node*> successors;
-        // The necessary action to get to this node from the parent node
-        Action action;
-        // heuristic function for the node
-        int f;
-        // path cost till this node
-        int g;
+		State* _state;
+		bool _visited;
+        Node* _parent;
+		vector<Node*> _successors;
+        Action _action;
+        double _f;
+        int _g;
 
 	public:
         Node(State* state, Node* parent = nullptr, int g = 0, Action action = NO_ACTION, int f = 0, bool visited = false)
         {
-            this->state = state;
-            this->visited = visited;
-            this->parent = parent;
-            this->f = f;
-            this->g = g;
-            this->action = action;
+            this->_state = state;
+            this->_visited = visited;
+            this->_parent = parent;
+            this->_f = f;
+            this->_g = g;
+            this->_action = action;
         }        
 
 		~Node()
@@ -44,101 +42,109 @@ class Node
 			
 		}
 
-        void AddSuccessor(Node* newSuccessor);
+        void addSuccessor(Node* newSuccessor);
 
-        Action GetAction()
+        Action getAction() const
         {
-            return this->action;
+            return this->_action;
         }
 
-        bool GetVisited() const
+        bool getVisited() const
 		{
-			return this->visited;
+			return this->_visited;
 		}
 		
-		int GetNumberOfSuccessors() const
+		int getNumberOfSuccessors() const
 		{
-			return this->successors.size();
+			return this->_successors.size();
 		}
 
-        int GetF()
+        int getF() const
         {
-            return this->f;
+            return this->_f;
         }
 
-        int GetG()
+        int getG() const
         {
-            return this->g;
+            return this->_g;
         }
 
-        // IMPLEMENTED
-        Node* GetSuccessor(int idx);
+        Node* getSuccessor(int idx);
 
         // Can return Node* because Node (this class) is a class and already have encapsulation
-        Node* GetParent() const
+        Node* getParent() const
         {
-            return this->parent;
+            return this->_parent;
         }
 
-        State* GetState() const
+        State* getState() const
         {
-            return this->state;            
+            return this->_state;            
         }
 
-		void SetVisited(bool visited)
+		void setVisited(bool visited)
 		{
-			this->visited = visited;
+			this->_visited = visited;
 		}
 
-        void SetAction(Action action)
+        void setAction(Action action)
         {
-            this->action = action;
+            this->_action = action;
         }
 
-        void SetF(int f)
+        void setF(int f)
         {
-            this->f = f;
+            this->_f = f;
         }
 
-        void SetG(int g)
+        void setG(int g)
         {
-            this->g = g;
+            this->_g = g;
         }
 
-        void SetParent(Node* parent)
+        void setParent(Node* parent)
         {
-            this->parent = parent;
+            this->_parent = parent;
         }
 };
 
 class Tree
 {
 	private:
-		Node* root;
-        // tree class is friend of graph class
-        Graph* graph;
+		Node* _root;
+        vector<Node*> _nodes;
+        Graph* _graph;
 
 	public:
         // When a tree is created it must receive the pointer to the root (source) state
         // and the associated graph
         Tree(State* rootState, Graph* graph)
         {
-            this->root = new Node(rootState);
-            this->graph = graph;
+            this->_root = new Node(rootState);
+            this->_nodes.push_back(this->_root);
+            this->_graph = graph;
         }
 
 		~Tree()
 		{
-			
+			this->_nodes.clear();
 		}
 
-        // IMPLEMENTED
         // Find the successors from the node specified and expands the tree with them
-        void FindSuccessors(Node* parent);
+        void findSuccessors(Node* parent);
 
         // Determine the action taken to get from parent to child
         // idx is the index of the child in the graph
-        Action DetermineAction(int idx, Node* parent);
+        Action determineAction(int idx, Node* parent);
+
+        Node* getRootNode()
+        {
+            return this->_root;
+        }
+
+        bool isNodeInTree(State* state) const;
+
+        vector<Action> generateActionQueue(Node* node);
 };
 
 #endif // __TREE_H
