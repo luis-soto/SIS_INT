@@ -1,0 +1,42 @@
+robo(piter).
+homem(silvestre).
+homem(hadar).
+homem(asrat).
+mulher(nadia).
+pai(silvestre,nadia).
+ama(nadia,hadar).
+ama(hadar,nadia).
+
+proibido_fazer(R,B) :- robo(R),capaz_de_fazer(R,B),machuca(B,H),humano(H).
+
+obrigado_a_fazer(R,B) :- (robo(R),capaz_de_fazer(R,B),oferece_perigo(C,H),humano(H),afasta(B,C),not(proibido_fazer(R,B)));
+    			 (robo(R),capaz_de_fazer(R,B),mandou_fazer(H,R,B),humano(H),not(proibido_fazer(R,B)));
+    			 (robo(R),capaz_de_fazer(R,B),oferece_perigo(C,R),afasta(B,C),not(proibido_fazer(R,B))).
+
+nao_deve_fazer(R,Ato) :- proibido_fazer(R,Ato);not(capaz_de_fazer(R,Ato)).
+
+machuca(derrubar(H),H) :- animal(H).
+
+animal(monstro).
+
+animal(H) :- humano(H).
+
+objeto_fisico(O) :- animal(O).
+
+humano(H):-homem(H);mulher(H).
+
+oferece_perigo(monstro,H) :- humano(H),ataca(monstro,H).
+
+afasta(derrubar(monstro),monstro).
+
+mandou_fazer(silvestre,piter,proteger(nadia)).
+mandou_fazer(hadar,piter,derrubar(asrat)).
+mandou_fazer(asrat,piter,derrubar(hadar)).
+
+ataca(monstro, nadia).
+
+capaz_de_fazer(piter, derrubar(monstro)).
+
+capaz_de_fazer(piter, derrubar(X)) :- humano(X).
+
+capaz_de_fazer(piter, beijar(X)) :- mulher(X).
