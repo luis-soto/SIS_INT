@@ -1,0 +1,14 @@
+#!/bin/sh
+
+rm *.o
+g++ -I ./ -c map.cpp -o map.o -g
+g++ -I ./ -c graph.cpp -o graph.o -g
+g++ -I ./ -c map-displayer.cpp -o map-displayer.o -g
+g++ -I ./ -c problem-formulator.cpp -o problem-formulator.o -g
+g++ -I ./ -c tree.cpp -o tree.o -g
+g++ -I ./ -c a-star.cpp -o a-star.o -g
+g++ -I ./ -c depth-first.cpp -o depth-first.o -g
+g++ -I ./ -c breadth-first.cpp -o breadth-first.o -g
+g++ -I ./ -c problem-solver.cpp -o problem-solver.o -g
+g++ -I ./ main.cpp *.o -o main -g
+
