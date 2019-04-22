@@ -23,15 +23,6 @@ vector<Action> BreadthFirst::breadthFirstSearch()
         this->_visitedNodes++;
         this->_actualNode = this->_openList[0];
 
-        cout << endl;
-        displayOpenList();
-        cout << "visiting node x = " << this->_actualNode->getState()->getX() << endl;
-        cout << "visiting node y = " << this->_actualNode->getState()->getY() << endl;
-        cout << "visiting node dir = " << this->_actualNode->getState()->getDir() << endl;
-        cout << "visiting node f = " << this->_actualNode->getF() << endl;
-        cout << "visited of visiting node = " << this->_actualNode->getVisited() << endl;
-        cout << endl;
-
         this->_actualNode->setVisited(true);
 
         this->_openList.erase(this->_openList.begin());

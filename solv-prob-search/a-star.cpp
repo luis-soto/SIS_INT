@@ -24,16 +24,6 @@ vector<Action> AStar::aStarSearch()
         int bestIdx = this->findBestNodeInOpenList();
         this->_actualNode = this->_openList[bestIdx];
 
-        cout << endl;
-        displayOpenList();
-        cout << "bestIdx = " << bestIdx << endl;
-        cout << "visiting node x = " << _actualNode->getState()->getX() << endl;
-        cout << "visiting node y = " << _actualNode->getState()->getY() << endl;
-        cout << "visiting node dir = " << _actualNode->getState()->getDir() << endl;
-        cout << "visiting node f = " << _actualNode->getF() << endl;
-        cout << "visited of visiting node = " << this->_actualNode->getVisited() << endl;
-        cout << endl;
-
         this->_actualNode->setVisited(true);
 
         this->_openList.erase(this->_openList.begin()+bestIdx);

@@ -23,15 +23,6 @@ vector<Action> DepthFirst::depthFirstSearch()
         this->_visitedNodes++;
         this->_actualNode = this->_openList[this->_openList.size()-1];
 
-        cout << endl;
-        displayOpenList();
-        cout << "visiting node x = " << _actualNode->getState()->getX() << endl;
-        cout << "visiting node y = " << _actualNode->getState()->getY() << endl;
-        cout << "visiting node dir = " << _actualNode->getState()->getDir() << endl;
-        cout << "visiting node f = " << _actualNode->getF() << endl;
-        cout << "visited of visiting node = " << this->_actualNode->getVisited() << endl;
-        cout << endl;
-
         this->_actualNode->setVisited(true);
 
         this->_openList.pop_back();
