@@ -2,7 +2,7 @@
 #include "a-star.h"
 #include "breadth-first.h"
 #include "depth-first.h"
-
+#include "map-displayer.h"
 using namespace std;
 
 // -------------------------------------------------------------------------------------------------
@@ -81,5 +81,11 @@ vector<Action> ProblemSolver::searchSolution(SolveWith searchAlgorithm)
 			}
 		}
 	}
+
+
+    MapDisplayer* mapDisplayer  = new MapDisplayer(this->_problemFormulation->getMap());
+    mapDisplayer->showSolution(this->_solution);
+    delete mapDisplayer;
+
     return this->_solution;
 }
