@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __INDIVIDUAL_H
+#define __INDIVIDUAL_H
+
 #include "Header.h"
 
 class Individual
@@ -27,3 +29,4 @@ class Individual
 		void printIndividual();
 };
 
+#endif // __INDIVIDUAL_H

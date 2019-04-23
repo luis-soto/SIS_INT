@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __MAP_H
+#define __MAP_H
 #include "Header.h"
 
 class Map
@@ -35,3 +36,5 @@ class Map
         char getMatrixMap(int valX, int valY);
 
 };
+
+#endif // __MAP_H

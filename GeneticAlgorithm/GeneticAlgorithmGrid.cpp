@@ -10,9 +10,11 @@ int main()
 	geneticAlgorithm->generatePopulation();
 	geneticAlgorithm->printPopulation();
 	geneticAlgorithm->crossoverPopulation();
+
 	std::cout << "New population:" << endl;
+	
 	geneticAlgorithm->printPopulation();
-	delete(geneticAlgorithm);
+	delete geneticAlgorithm;
 	return 0;
 }
 
