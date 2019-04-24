@@ -6,12 +6,12 @@
 #include <stdio.h>
 #include <time.h>
 #define numberOfGenes 3
-#define numDiagonal 4
 #define sizeOfGeneration 100
-#define numberOfRemainingIndividuals 10
-#define manhattanObstaclePoint 1
-#define manhattanCellPoint 1
-#define diagonalObstaclePoint 5
-#define diagonalGoalPoint 0
-#define stopCriterion 10
+#define numberOfRemainingIndividuals 30
+#define manhattanObstaclePoint 5
+#define manhattanCellPoint 3
+#define diagonalObstaclePoint 4
+#define diagonalCellPoint 1
+#define diagonalGoalPoint 5
+#define stopCriterion 50
 using namespace std;

@@ -28,16 +28,16 @@ vector<pair <int, int>> Individual::getGenes() {
 }
 
 void Individual::setPoints(int valPoints) {
-	points = valPoints;
+	this->points = valPoints;
 }
 
 int Individual::getPoints() {
-	return points;
+	return this->points;
 }
 
 void Individual::printIndividual() {
-	for (int i = 0; i < genes.size(); i++) {
+	for (int i = 0; i < (int)genes.size(); i++) {
 		std::cout << "(" << genes[i].first << "," << genes[i].second << ")" << " ";
 	}
-	std::cout << endl;
+	std::cout << "Points: " << getPoints() << endl;
 }

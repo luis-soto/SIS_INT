@@ -21,31 +21,31 @@ class GeneticAlgorithm
 
 		void generatePopulation();
 
-		void printMap() const;
+		void printMap();
 
-		Individual* crossover(const Individual& firstIndividual, const Individual& secondIndividual);
+		Individual* crossover(Individual firstIndividual, Individual secondIndividual);
 
 		void crossoverPopulation();
 
-		void selectParents(vector<Individual>& nextGenProgenitors);
+		static bool comparePoints(Individual individual1, Individual individual2);
 
-		void mutation(Individual& individual);
+		void selectParents();
 
-		void printPopulation() const;
+		void mutation(Individual individual);
+
+		void printPopulation();
 
 		void calculatePopulationFitness();
 
-		void calculateFitness(Individual& individual);
+		int calculateFitness(Individual individual);
 
-		int manhattanXY(const Individual& individual) const;
+		int manhattanXY(Individual individual);
 
-		int manhattanYX(const Individual& individual) const;
+		int manhattanYX(Individual individual);
 
-		int diagonal(const Individual& individual) const;
+		int diagonal(Individual individual);
 
-		bool posInRange(int r, int c) const;
-
-		bool stopFunction(Individual& individual);
+		bool stopFunction(Individual individual);
 };
 
 #endif // __GENETIC_ALGORITHM_H

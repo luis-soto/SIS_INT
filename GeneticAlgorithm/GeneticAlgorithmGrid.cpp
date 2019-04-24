@@ -7,13 +7,7 @@ int main()
 {
 	GeneticAlgorithm* geneticAlgorithm = new GeneticAlgorithm();
 	geneticAlgorithm->printMap();
-	geneticAlgorithm->generatePopulation();
-	geneticAlgorithm->printPopulation();
-	geneticAlgorithm->crossoverPopulation();
-
-	std::cout << "New population:" << endl;
-	
-	geneticAlgorithm->printPopulation();
+	geneticAlgorithm->findSolution().printIndividual();
 	delete geneticAlgorithm;
 	return 0;
 }
