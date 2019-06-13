@@ -1,2 +1,6 @@
-./solv-prob-search/compileProj
-./solv-prob-search/*.o
+solv-prob-search/compileProj
+solv-prob-search/*.o
+FuzzyLogic/V-REP_PRO_EDU_V3_6_1_Ubuntu18_04/
+FLIE-master/
+bubbleRobClient/
+
