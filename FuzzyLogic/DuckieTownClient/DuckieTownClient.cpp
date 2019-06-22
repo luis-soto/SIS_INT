@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "flie.h"
 
 extern "C" {
     #include "extApi.h"
@@ -29,19 +30,20 @@ extern "C" {
 //calcular a posicao no vetor de imagem, para um pixel em "linha,coluna". Inicio embaixo a esquerda, uma linha por vez, até o topo a direita. Canal 0=R,1=G,2=B
 int getposition(int linha, int coluna, int canal, int resolucaoX, int resolucaoY)
 {
- if((linha<(resolucaoX))&&(coluna<(resolucaoY)))
- return(linha*((resolucaoX-1)*3)+coluna*3+canal);
- else
- return(0);
+	if((linha<(resolucaoX))&&(coluna<(resolucaoY)))
+	return(linha*((resolucaoX-1)*3)+coluna*3+canal);
+	else
+	return(0);
 }
 
 int getpos(int lin, int col, int canal)
 {
- return(getposition(lin, col, canal, 128, 128));
+ 	return(getposition(lin, col, canal, 128, 128));
 }
 
 int main(int argc,char* argv[])
 {
+	configFuzzy();
 	int portNb=0;
 	int leftMotorHandle;
 	int rightMotorHandle;
@@ -79,24 +81,6 @@ int main(int argc,char* argv[])
 
 		while (simxGetConnectionId(clientID)!=-1)
 		{
-			/*simxUChar sensorTrigger=0;
-			if (simxReadProximitySensor(clientID,sensorHandle[4],&sensorTrigger,NULL,NULL,NULL,simx_opmode_streaming)==simx_return_ok)
-			{ // We succeeded at reading the proximity sensor
-				int simulationTime=simxGetLastCmdTime(clientID);
-				if (simulationTime-driveBackStartTime<3000)
-				{ // driving backwards while slightly turning:
-					motorSpeeds[0]=-3.1415f*0.5f;
-					motorSpeeds[1]=-3.1415f*0.25f;
-				}
-				else
-				{ // going forward:
-					motorSpeeds[0]=3.1415f;
-					motorSpeeds[1]=3.1415f;
-					if (sensorTrigger)
-						driveBackStartTime=simulationTime; // We detected something, and start the backward mode
-				}
-
-			}*/
 		    int passive;
 
 		    simxGetObjectHandle(clientID,"ePuck_camera#0",&passive,simx_opmode_blocking);
@@ -119,27 +103,39 @@ int main(int argc,char* argv[])
 	            }
 
 		for(int i = 0; i < 6; i++){
-	                float distanceAxis[4];
-			distanceSensor[i]=10.0;
-
-       			simxReadProximitySensor(clientID,sensorHandle[i],NULL,&(distanceAxis[0]),NULL,NULL,simx_opmode_buffer);
+	        float distanceAxis[4];
+			distanceSensor[i] = 40.0;
+       		simxReadProximitySensor(clientID,sensorHandle[i],NULL,&(distanceAxis[0]),NULL,NULL,simx_opmode_buffer);
 			float distance = pow(distanceAxis[0],2) + pow(distanceAxis[1],2) + pow(distanceAxis[2],2);
-       			distance = sqrt(distance);
+       		distance = sqrt(distance);
 			distanceSensor[i]=distance;
-			if((distanceSensor[i]<0.001)||(distanceSensor[i]>10.0)) distanceSensor[i]=1.0;
-			if(distanceSensor[i]!=1.0) {count++;printf("%d = %f \t", i, distanceSensor[i]);}
+			if(distanceSensor[i] > 0.040){
+				distanceSensor[i] = 40.0;
 			}
-		if(count>0){count=0;printf("\n");}
-		if(distanceSensor[4]<0.032)
-		{
-			motorSpeeds[0]=-3.1415f;
-			motorSpeeds[1]=3.1415f;
+			else{
+				distanceSensor[i] = distanceSensor[i]*1000;
+			}
 		}
-		else
-		{		
-			motorSpeeds[0]=3.1415f;
-			motorSpeeds[1]=3.1415f;
-		}	
+
+		float distLeft, distCenter, distRight;
+    	
+		distLeft = (distanceSensor[0] < distanceSensor[1] ? distanceSensor[0] : distanceSensor[1]);
+		distCenter = (distanceSensor[2] < distanceSensor[3] ? distanceSensor[2] : distanceSensor[3]);
+		distRight = (distanceSensor[4] < distanceSensor[5] ? distanceSensor[4] : distanceSensor[5]);
+ 
+		std::cout << endl <<"Distance Sensor Left: " << distLeft << endl;
+		std::cout <<"Distance Sensor Center: " << distCenter << endl;
+		std::cout <<"Distance Sensor Right: " << distRight << endl;
+
+		for(int i = 0; i < 6; i++){
+			std::cout << "Distance Sensor " << i << " valor: " << distanceSensor[i] << endl;
+		}
+		std::cout << endl; 
+
+
+		motorSpeeds[0] = rightMotorInference(distLeft,distCenter,distRight);
+        motorSpeeds[1] = leftMotorInference(distLeft,distCenter,distRight);
+
 		simxSetJointTargetVelocity(clientID,leftMotorHandle,motorSpeeds[0],simx_opmode_oneshot);			
 		simxSetJointTargetVelocity(clientID,rightMotorHandle,motorSpeeds[1],simx_opmode_oneshot);			
 		
