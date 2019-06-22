@@ -15,9 +15,9 @@ using namespace std;
 
 void configFuzzy(void);
 
-float leftMotorInference(float distLeft, float distCenter, float distRight);
-
 float rightMotorInference(float distLeft, float distCenter, float distRight);
+
+float leftMotorInference(float distLeft, float distCenter, float distRight);
 
 
 

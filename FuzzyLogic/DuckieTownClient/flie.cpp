@@ -148,11 +148,11 @@ void configFuzzy(void)
     fc2.insert_rule("Far", "Far", "Far", "High Speed");
 }
 
-float leftMotorInference(float distLeft, float distCenter, float distRight){
+float rightMotorInference(float distLeft, float distCenter, float distRight){
     return fc1.make_inference(distLeft, distCenter, distRight);
 }
 
-float rightMotorInference(float distLeft, float distCenter, float distRight){
+float leftMotorInference(float distLeft, float distCenter, float distRight){
     return fc2.make_inference(distLeft, distCenter, distRight);
 }
 // ----------------------------------------------------------------------------------------------------

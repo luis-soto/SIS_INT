@@ -108,7 +108,7 @@ int main(int argc,char* argv[])
        		simxReadProximitySensor(clientID,sensorHandle[i],NULL,&(distanceAxis[0]),NULL,NULL,simx_opmode_buffer);
 			float distance = pow(distanceAxis[0],2) + pow(distanceAxis[1],2) + pow(distanceAxis[2],2);
        		distance = sqrt(distance);
-			distanceSensor[i]=distance;
+			distanceSensor[i] = distance;
 			if(distanceSensor[i] > 0.040){
 				distanceSensor[i] = 40.0;
 			}
@@ -132,14 +132,13 @@ int main(int argc,char* argv[])
 		}
 		std::cout << endl; 
 
-
-		motorSpeeds[0] = rightMotorInference(distLeft,distCenter,distRight);
-        motorSpeeds[1] = leftMotorInference(distLeft,distCenter,distRight);
+		motorSpeeds[0] = leftMotorInference(distLeft,distCenter,distRight);
+        motorSpeeds[1] = rightMotorInference(distLeft,distCenter,distRight);
 
 		simxSetJointTargetVelocity(clientID,leftMotorHandle,motorSpeeds[0],simx_opmode_oneshot);			
 		simxSetJointTargetVelocity(clientID,rightMotorHandle,motorSpeeds[1],simx_opmode_oneshot);			
 		
-		extApi_sleepMs(50);
+		// extApi_sleepMs(500);
 	}
 	simxFinish(clientID);
  	}
