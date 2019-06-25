@@ -35,43 +35,36 @@ rule infrule[2];
 void configFuzzy(void)
 {
     fsNear.setname("Near");
-    fsNear.setrange(1.0, 15.0);
-    fsNear.setval(1.0, 1.0, 11.0, 15.0);
-
-    fsHalf.setname("Half");
-    fsHalf.setrange(11.0, 30.0);
-    fsHalf.setval(11.0, 15.0, 26.0, 30.0);
+    fsNear.setrange(1.0, 32.0);
+    fsNear.setval(1.0, 1.0, 28.0, 32.0);
 
     fsFar.setname("Far");
-    fsFar.setrange(26.0, 40.0);
-    fsFar.setval(26.0, 30.0, 40.0, 40.0);
+    fsFar.setrange(28.0, 40.0);
+    fsFar.setval(28.0, 32.0, 40.0, 40.0);
 
     leftSensor.setname("Left Sensor");
     leftSensor.includecategory(&fsNear);
-    leftSensor.includecategory(&fsHalf);
     leftSensor.includecategory(&fsFar);
 
     centerSensor.setname("Center Sensor");
     centerSensor.includecategory(&fsNear);
-    centerSensor.includecategory(&fsHalf);
     centerSensor.includecategory(&fsFar);
 
     rightSensor.setname("Right Sensor");
     rightSensor.includecategory(&fsNear);
-    rightSensor.includecategory(&fsHalf);
     rightSensor.includecategory(&fsFar);
 
     fsLowSpeed.setname("Low Speed");
-    fsLowSpeed.setrange(0, pi/3 + pi/15);
-    fsLowSpeed.setval(0, 0, pi/3 - pi/15, pi/3 + pi/15);
+    fsLowSpeed.setrange(-pi/2, pi/10);
+    fsLowSpeed.setval(-pi/2, -pi/2, -pi/10, pi/10);
 
     fsAverageSpeed.setname("Average Speed");
-    fsAverageSpeed.setrange(pi/3 - pi/15, 2*pi/3 + pi/15);
-    fsAverageSpeed.setval(pi/3 - pi/15 , pi/3 + pi/15, 2*pi/3 - pi/15, 2*pi/3 + pi/15);
+    fsAverageSpeed.setrange(-pi/10, pi/2 + pi/10);
+    fsAverageSpeed.setval(-pi/10, pi/10, pi/2 - pi/10, pi/2 + pi/10);
 
     fsHighSpeed.setname("High Speed");
-    fsHighSpeed.setrange(2*pi/3 - pi/15, pi);
-    fsHighSpeed.setval(2*pi/3 - pi/15, 2*pi/3 + pi/15, pi, pi);
+    fsHighSpeed.setrange(pi/2 - pi/10, pi);
+    fsHighSpeed.setval(pi/2 - pi/10, pi/2 + pi/10, pi, pi);
 
     leftEngine.setname("Left Engine");
     leftEngine.includecategory(&fsLowSpeed);
@@ -90,62 +83,74 @@ void configFuzzy(void)
     fc2.set_defuzz(CENTROID);
 
     // Right engine rules
-    fc1.insert_rule("Near", "Near", "Near", "Low Speed");
-    fc1.insert_rule("Near", "Near", "Half", "Low Speed");
     fc1.insert_rule("Near", "Near", "Far", "Low Speed");
-    fc1.insert_rule("Near", "Half", "Near", "Low Speed");
-    fc1.insert_rule("Near", "Half", "Half", "Low Speed");
-    fc1.insert_rule("Near", "Half", "Far", "Low Speed");
-    fc1.insert_rule("Near", "Far", "Near", "Low Speed");
-    fc1.insert_rule("Near", "Far", "Half", "Average Speed");
     fc1.insert_rule("Near", "Far", "Far", "Average Speed");
-    fc1.insert_rule("Half", "Near", "Near", "High Speed");
-    fc1.insert_rule("Half", "Near", "Half", "Low Speed");
-    fc1.insert_rule("Half", "Near", "Far", "Low Speed");
-    fc1.insert_rule("Half", "Half", "Near", "High Speed");
-    fc1.insert_rule("Half", "Half", "Half", "Average Speed");
-    fc1.insert_rule("Half", "Half", "Far", "Average Speed");
-    fc1.insert_rule("Half", "Far", "Near", "High Speed");
-    fc1.insert_rule("Half", "Far", "Half", "Average Speed");
-    fc1.insert_rule("Half", "Far", "Far", "Average Speed");
     fc1.insert_rule("Far", "Near", "Near", "High Speed");
-    fc1.insert_rule("Far", "Near", "Half", "High Speed");
-    fc1.insert_rule("Far", "Near", "Far", "Low Speed");
-    fc1.insert_rule("Far", "Half", "Near", "High Speed");
-    fc1.insert_rule("Far", "Half", "Half", "High Speed");
-    fc1.insert_rule("Far", "Half", "Far", "Average Speed");
     fc1.insert_rule("Far", "Far", "Near", "High Speed");
-    fc1.insert_rule("Far", "Far", "Half", "High Speed");
     fc1.insert_rule("Far", "Far", "Far", "High Speed");
+    fc1.insert_rule("Near", "Near", "Near", "Low Speed");
+    // fc1.insert_rule("Near", "Near", "Near", "Low Speed");
+    // fc1.insert_rule("Near", "Near", "Half", "Low Speed");
+    // fc1.insert_rule("Near", "Near", "Far", "Low Speed");
+    // fc1.insert_rule("Near", "Half", "Near", "Low Speed");
+    // fc1.insert_rule("Near", "Half", "Half", "Low Speed");
+    // fc1.insert_rule("Near", "Half", "Far", "Low Speed");
+    // fc1.insert_rule("Near", "Far", "Near", "Low Speed");
+    // fc1.insert_rule("Near", "Far", "Half", "Average Speed");
+    // fc1.insert_rule("Near", "Far", "Far", "Average Speed");
+    // fc1.insert_rule("Half", "Near", "Near", "High Speed");
+    // fc1.insert_rule("Half", "Near", "Half", "Low Speed");
+    // fc1.insert_rule("Half", "Near", "Far", "Low Speed");
+    // fc1.insert_rule("Half", "Half", "Near", "High Speed");
+    // fc1.insert_rule("Half", "Half", "Half", "Average Speed");
+    // fc1.insert_rule("Half", "Half", "Far", "Average Speed");
+    // fc1.insert_rule("Half", "Far", "Near", "High Speed");
+    // fc1.insert_rule("Half", "Far", "Half", "Average Speed");
+    // fc1.insert_rule("Half", "Far", "Far", "Average Speed");
+    // fc1.insert_rule("Far", "Near", "Near", "High Speed");
+    // fc1.insert_rule("Far", "Near", "Half", "High Speed");
+    // fc1.insert_rule("Far", "Near", "Far", "Low Speed");
+    // fc1.insert_rule("Far", "Half", "Near", "High Speed");
+    // fc1.insert_rule("Far", "Half", "Half", "High Speed");
+    // fc1.insert_rule("Far", "Half", "Far", "Average Speed");
+    // fc1.insert_rule("Far", "Far", "Near", "High Speed");
+    // fc1.insert_rule("Far", "Far", "Half", "High Speed");
+    // fc1.insert_rule("Far", "Far", "Far", "High Speed");
 
     // Left engine rules
-    fc2.insert_rule("Near", "Near", "Near", "High Speed");
-    fc2.insert_rule("Near", "Near", "Half", "High Speed");
     fc2.insert_rule("Near", "Near", "Far", "High Speed");
-    fc2.insert_rule("Near", "Half", "Near", "High Speed");
-    fc2.insert_rule("Near", "Half", "Half", "High Speed");
-    fc2.insert_rule("Near", "Half", "Far", "High Speed");
-    fc2.insert_rule("Near", "Far", "Near", "High Speed");
-    fc2.insert_rule("Near", "Far", "Half", "High Speed");
     fc2.insert_rule("Near", "Far", "Far", "High Speed");
-    fc2.insert_rule("Half", "Near", "Near", "Low Speed");
-    fc2.insert_rule("Half", "Near", "Half", "High Speed");
-    fc2.insert_rule("Half", "Near", "Far", "High Speed");
-    fc2.insert_rule("Half", "Half", "Near", "Low Speed");
-    fc2.insert_rule("Half", "Half", "Half", "Average Speed");
-    fc2.insert_rule("Half", "Half", "Far", "High Speed");
-    fc2.insert_rule("Half", "Far", "Near", "Average Speed");
-    fc2.insert_rule("Half", "Far", "Half", "Average Speed");
-    fc2.insert_rule("Half", "Far", "Far", "High Speed");
     fc2.insert_rule("Far", "Near", "Near", "Low Speed");
-    fc2.insert_rule("Far", "Near", "Half", "Low Speed");
-    fc2.insert_rule("Far", "Near", "Far", "High Speed");
-    fc2.insert_rule("Far", "Half", "Near", "Average Speed");
-    fc2.insert_rule("Far", "Half", "Half", "Average Speed");
-    fc2.insert_rule("Far", "Half", "Far", "High Speed");
-    fc2.insert_rule("Far", "Far", "Near", "Low Speed");
-    fc2.insert_rule("Far", "Far", "Half", "Average Speed");
+    fc2.insert_rule("Far", "Far", "Near", "Average Speed");
     fc2.insert_rule("Far", "Far", "Far", "High Speed");
+    fc2.insert_rule("Near", "Near", "Near", "High Speed");
+    // fc2.insert_rule("Near", "Near", "Near", "High Speed");
+    // fc2.insert_rule("Near", "Near", "Half", "High Speed");
+    // fc2.insert_rule("Near", "Near", "Far", "High Speed");
+    // fc2.insert_rule("Near", "Half", "Near", "High Speed");
+    // fc2.insert_rule("Near", "Half", "Half", "High Speed");
+    // fc2.insert_rule("Near", "Half", "Far", "High Speed");
+    // fc2.insert_rule("Near", "Far", "Near", "High Speed");
+    // fc2.insert_rule("Near", "Far", "Half", "High Speed");
+    // fc2.insert_rule("Near", "Far", "Far", "High Speed");
+    // fc2.insert_rule("Half", "Near", "Near", "Low Speed");
+    // fc2.insert_rule("Half", "Near", "Half", "High Speed");
+    // fc2.insert_rule("Half", "Near", "Far", "High Speed");
+    // fc2.insert_rule("Half", "Half", "Near", "Low Speed");
+    // fc2.insert_rule("Half", "Half", "Half", "Average Speed");
+    // fc2.insert_rule("Half", "Half", "Far", "High Speed");
+    // fc2.insert_rule("Half", "Far", "Near", "Average Speed");
+    // fc2.insert_rule("Half", "Far", "Half", "Average Speed");
+    // fc2.insert_rule("Half", "Far", "Far", "High Speed");
+    // fc2.insert_rule("Far", "Near", "Near", "Low Speed");
+    // fc2.insert_rule("Far", "Near", "Half", "Low Speed");
+    // fc2.insert_rule("Far", "Near", "Far", "High Speed");
+    // fc2.insert_rule("Far", "Half", "Near", "Average Speed");
+    // fc2.insert_rule("Far", "Half", "Half", "Average Speed");
+    // fc2.insert_rule("Far", "Half", "Far", "High Speed");
+    // fc2.insert_rule("Far", "Far", "Near", "Low Speed");
+    // fc2.insert_rule("Far", "Far", "Half", "Average Speed");
+    // fc2.insert_rule("Far", "Far", "Far", "High Speed");
 }
 
 float rightMotorInference(float distLeft, float distCenter, float distRight){

@@ -119,9 +119,12 @@ int main(int argc,char* argv[])
 
 		float distLeft, distCenter, distRight;
     	
-		distLeft = (distanceSensor[0] < distanceSensor[1] ? distanceSensor[0] : distanceSensor[1]);
+		distLeft = (distanceSensor[1] + distanceSensor[2])/2;
+		// distLeft = (distanceSensor[0] < distanceSensor[1] ? distanceSensor[0] : distanceSensor[1]);
 		distCenter = (distanceSensor[2] < distanceSensor[3] ? distanceSensor[2] : distanceSensor[3]);
-		distRight = (distanceSensor[4] < distanceSensor[5] ? distanceSensor[4] : distanceSensor[5]);
+		// distRight = (distanceSensor[4] < distanceSensor[5] ? distanceSensor[4] : distanceSensor[5]);
+		// distCenter = (distanceSensor[2] + distanceSensor[3])/2;
+		distRight = (distanceSensor[3] + distanceSensor[4])/2;
  
 		std::cout << endl <<"Distance Sensor Left: " << distLeft << endl;
 		std::cout <<"Distance Sensor Center: " << distCenter << endl;
@@ -138,7 +141,7 @@ int main(int argc,char* argv[])
 		simxSetJointTargetVelocity(clientID,leftMotorHandle,motorSpeeds[0],simx_opmode_oneshot);			
 		simxSetJointTargetVelocity(clientID,rightMotorHandle,motorSpeeds[1],simx_opmode_oneshot);			
 		
-		// extApi_sleepMs(500);
+		// extApi_sleepMs(50);
 	}
 	simxFinish(clientID);
  	}
