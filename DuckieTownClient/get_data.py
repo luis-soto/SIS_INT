@@ -22,8 +22,10 @@ if(clientID != -1):
             time.sleep(0.5)
             break
 
+    err,resolution,image = vrep.simxGetVisionSensorImage(clientID, v0, 1, vrep.simx_opmode_streaming)
+
     while(vrep.simxGetConnectionId(clientID) != -1):
-        err,resolution,image = vrep.simxGetVisionSensorImage(clientID, v0, 1, vrep.simx_opmode_oneshot)
+        err,resolution,image = vrep.simxGetVisionSensorImage(clientID, v0, 1, vrep.simx_opmode_buffer)
         if(err == vrep.simx_return_ok):
             image = np.array(image, dtype = np.uint8)
             image = np.reshape(image, (1, 128*128))
